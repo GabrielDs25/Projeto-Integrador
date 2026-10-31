@@ -1,0 +1,9 @@
+id,pergunta,resposta_referencia,tema
+1,O que é uma variável em Python?,Um nome que referencia um valor armazenado durante a execução.,Python básico
+2,O que faz uma condição if?,Executa um bloco de código quando uma condição é verdadeira.,Python básico
+3,Para que serve uma função?,Agrupa instruções que podem ser chamadas para realizar uma tarefa.,Python básico
+4,Para que serve o loop for?,Permite iterar sobre uma sequência de elementos.,Python básico
+5,O que é uma lista em Python?,Uma coleção ordenada e mutável de elementos.,Python básico
+6,O que é um dicionário em Python?,Uma coleção de pares chave-valor, onde cada chave é única.,Python básico
+7,O que é uma tupla em Python?,Uma coleção ordenada e imutável de elementos.,Python básico
+8,O que é uma classe em Python?,Um modelo para criar objetos que encapsulam dados e comportamentos.,Programação orient
