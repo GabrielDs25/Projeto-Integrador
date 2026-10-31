@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Tema 3 — Plataforma de Avaliação de Modelos de IA
 
 Projeto acadêmico para testar e comparar respostas de modelos de inteligência artificial.
@@ -65,3 +66,20 @@ python -m pytest
 ## Privacidade e custo
 
 Usar perguntas sintéticas ou conteúdo público. Não inserir senhas, chaves de API ou dados pessoais reais. O objetivo é executar o projeto sem serviços pagos; a escolha final dos modelos deve ser testada no computador do grupo.
+=======
+Projeto Integrador
+
+Tema 3. Plataforma de avaliação de LLMs e agentes
+
+Curso: EAD_PROINT_100.DD-ADS-PI-10-74.2026.74
+
+Disciplina: Projeto Integrador
+
+Integrante 1: [Gabriel dos Santos] – RA: [2411597]
+
+Integrante 2: [Leonardo Henrique Félix] – RA: [2410717]
+
+Integrante 3: [Mateus Felipe Silva Pacheco] – RA: [2411247]
+
+
+>>>>>>> 782461515b80a2be77eacf10b65b2820b9e860b5
