@@ -83,7 +83,21 @@ python -m pytest
 Usar perguntas sintéticas ou conteúdo público. Não inserir senhas, chaves de API ou dados pessoais reais. O objetivo é executar o projeto sem serviços pagos; a escolha final dos modelos deve ser testada no computador do grupo.
 =======
 
+<img width="993" height="738" alt="Buscar pergunta" src="https://github.com/user-attachments/assets/5c55959c-276e-4113-a8f0-7b7caf78f85f" />
+Buscar pergunta
+Permite pesquisar palavras e localizar perguntas específicas dentro dos 100 casos cadastrados.
 
+<img width="1440" height="776" alt="Filtrar por tema" src="https://github.com/user-attachments/assets/da3e0037-9f44-4672-98a7-34d054f5dbba" />
+Filtrar por tema
+Permite selecionar assuntos, como coleções, arquivos e testes, para visualizar somente determinadas perguntas.
 
+<img width="1166" height="768" alt="Indicadores" src="https://github.com/user-attachments/assets/593410b0-a8f1-45d0-9573-d51189bfe14f" />
+Indicadores
+- 100 casos cadastrados.
+- 10 temas.
+- 100 casos encontrados.
 
+<img width="1027" height="777" alt="Distribuicao de casos por tema" src="https://github.com/user-attachments/assets/7e37c501-09ee-4ad9-9e7b-81c07484e347" />
+Distribuição de casos por tema
+Mostra graficamente quantas perguntas existem em cada assunto.
 
