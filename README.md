@@ -1,4 +1,19 @@
-<<<<<<< HEAD
+Projeto Integrador
+
+Tema 3. Plataforma de avaliação de LLMs e agentes
+
+Curso: EAD_PROINT_100.DD-ADS-PI-10-74.2026.74
+
+Disciplina: Projeto Integrador
+
+Integrante 1: [Gabriel dos Santos] – RA: [2411597]
+
+Integrante 2: [Leonardo Henrique Félix] – RA: [2410717]
+
+Integrante 3: [Mateus Felipe Silva Pacheco] – RA: [2411247]
+
+>>>>>>> 782461515b80a2be77eacf10b65b2820b9e860b5
+
 # Tema 3 — Plataforma de Avaliação de Modelos de IA
 
 Projeto acadêmico para testar e comparar respostas de modelos de inteligência artificial.
@@ -55,8 +70,8 @@ python -m pytest
 
 ## Próximas etapas
 
-1. Confirmar com o professor a escolha do Tema 3.
-2. Criar um repositório no GitHub e enviar estes arquivos.
+1. Confirmar com o professor a escolha do Tema 3. ok
+2. Criar um repositório no GitHub e enviar estes arquivos. ok
 3. Fazer a integração contínua (CI) executar os testes.
 4. Integrar modelos reais de IA locais, por exemplo usando Ollama.
 5. Preparar 100 casos de teste e avaliar pelo menos 30 casos com pessoas.
@@ -67,19 +82,8 @@ python -m pytest
 
 Usar perguntas sintéticas ou conteúdo público. Não inserir senhas, chaves de API ou dados pessoais reais. O objetivo é executar o projeto sem serviços pagos; a escolha final dos modelos deve ser testada no computador do grupo.
 =======
-Projeto Integrador
-
-Tema 3. Plataforma de avaliação de LLMs e agentes
-
-Curso: EAD_PROINT_100.DD-ADS-PI-10-74.2026.74
-
-Disciplina: Projeto Integrador
-
-Integrante 1: [Gabriel dos Santos] – RA: [2411597]
-
-Integrante 2: [Leonardo Henrique Félix] – RA: [2410717]
-
-Integrante 3: [Mateus Felipe Silva Pacheco] – RA: [2411247]
 
 
->>>>>>> 782461515b80a2be77eacf10b65b2820b9e860b5
+
+
+
