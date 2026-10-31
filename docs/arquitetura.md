@@ -4,17 +4,17 @@
 Usuário
   |
   v
-Tela Streamlit (src/app.py)
+Interface Streamlit (src/app.py)
+  | busca, filtro, consulta e exportação
+  +--> Casos de teste (eval/casos_exemplo.csv)
   |
-  v
-Funções de métricas (src/evaluation.py)
+  +--> Gráfico de quantidade de casos por tema
   |
-  +--> CSV/SQLite (etapa futura)
-  |
-  +--> Modelos locais via Ollama (etapa futura)
-  |
-  v
-Tabelas e gráficos
+  +--> Próxima etapa:
+         Modelos locais via Ollama
+         Resultados e métricas de avaliação
 ```
 
-A primeira versão usa dados fictícios para testar a interface e as métricas. Antes de usar resultados reais, o grupo deve integrar os modelos, registrar as versões utilizadas e guardar os dados brutos dos experimentos.
+A interface atual consulta os 100 casos cadastrados no CSV. Permite buscar perguntas, filtrar por tema, consultar respostas de referência e critérios de aprovação e baixar os casos filtrados. O gráfico apresenta a distribuição dos casos, não o desempenho de modelos.
+
+A integração com modelos ainda será feita. Antes de divulgar métricas de desempenho, o grupo deve executar os experimentos, registrar os modelos e suas versões, guardar os dados brutos e documentar falhas e limitações.
