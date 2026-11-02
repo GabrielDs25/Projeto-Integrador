@@ -20,7 +20,7 @@ O projeto consiste no desenvolvimento de uma plataforma destinada à avaliação
 
 A ferramenta tem como principal finalidade permitir a execução de testes padronizados, o registro das respostas geradas e a análise comparativa do desempenho de diferentes modelos, considerando critérios como qualidade das respostas, precisão, consistência e tempo de execução.
 
-**Estado atual do projeto:** A plataforma encontra-se em sua versão inicial, correspondente ao Marco 1. Nesta etapa, a interface utiliza dados de exemplo para demonstrar suas funcionalidades. A integração com modelos reais de Inteligência Artificial será implementada nas próximas fases do desenvolvimento.
+**Estado atual do projeto:** A plataforma já permite executar modelos locais instalados no Ollama com os mesmos casos de teste, registrar respostas, tempos e falhas em SQLite e consultar ou exportar os resultados. A avaliação automática da qualidade e a comparação com notas humanas permanecem como próximas etapas.
 
 ## 2. Objetivos do Projeto
 
@@ -83,6 +83,18 @@ streamlit run src/app.py
 ```
 
 Após a execução, o Streamlit disponibilizará um endereço local para acessar a plataforma.
+
+### 4.4. Executar modelos locais
+
+Instale e inicie o [Ollama](https://ollama.com/) e baixe os modelos desejados. Por exemplo:
+
+```bash
+ollama pull llama3.2:3b
+```
+
+Para a comparação prevista com três modelos, instale pelo menos mais dois modelos com o mesmo comando. Na plataforma, selecione os modelos instalados, escolha a quantidade de casos e inicie a avaliação. As respostas e os tempos são salvos em `data/evaluations.sqlite3` e podem ser consultados e exportados em CSV. Os erros de execução também são registrados; ainda não há aprovação automática das respostas.
+
+Para executar com Docker Compose, o serviço acessa o Ollama do computador em `host.docker.internal:11434` e mantém os resultados no diretório `data/`. Se o Ollama estiver em outro endereço, configure a variável `OLLAMA_HOST`.
 
 ## 5. Como Executar os Testes
 

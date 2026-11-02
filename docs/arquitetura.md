@@ -1,20 +1,30 @@
-# Arquitetura inicial
+# Arquitetura da plataforma
 
 ```text
-Usuário
+Usuario
   |
   v
 Interface Streamlit (src/app.py)
-  | busca, filtro, consulta e exportação
+  | busca, filtros, execucao e exportacao
   +--> Casos de teste (eval/casos_exemplo.csv)
   |
-  +--> Gráfico de quantidade de casos por tema
+  +--> Cliente Ollama (src/model_runner.py)
+  |     modelos locais instalados
   |
-  +--> Próxima etapa:
-         Modelos locais via Ollama
-         Resultados e métricas de avaliação
+  +--> SQLite (data/evaluations.sqlite3)
+  |     execucoes, respostas, tempos e falhas
+  |
+  +--> Comparacao de tempos medios e exportacao CSV
 ```
 
-A interface atual consulta os 100 casos cadastrados no CSV. Permite buscar perguntas, filtrar por tema, consultar respostas de referência e critérios de aprovação e baixar os casos filtrados. O gráfico apresenta a distribuição dos casos, não o desempenho de modelos.
+A interface consulta os 100 casos cadastrados no CSV, permite buscar perguntas,
+filtrar por tema, consultar respostas de referencia e criterios de aprovacao e
+baixar os casos filtrados. O usuario seleciona modelos instalados no Ollama e a
+quantidade de casos por execucao. As mesmas perguntas sao enviadas a cada modelo
+selecionado.
 
-A integração com modelos ainda será feita. Antes de divulgar métricas de desempenho, o grupo deve executar os experimentos, registrar os modelos e suas versões, guardar os dados brutos e documentar falhas e limitações.
+Respostas, tempos medidos e falhas sao persistidos no SQLite e podem ser
+consultados e exportados em CSV. O banco fica em `data/evaluations.sqlite3`;
+`EVALUATION_DB_PATH` permite configurar outro caminho. A aprovacao automatica,
+as notas humanas e a analise de concordancia ainda serao implementadas. Nenhum
+resultado e criado sem uma execucao real.
