@@ -14,8 +14,9 @@ def test_app_displays_cases_and_download_button(tmp_path, monkeypatch):
     assert not app.exception
     assert [metric.value for metric in app.metric] == ["100", "10", "100"]
     assert [button.label for button in app.get("download_button")] == [
-        "Baixar casos filtrados em CSV"
+        "Baixar perguntas filtradas em CSV"
     ]
+    assert app.button[0].label == "▶ Iniciar avaliação"
 
 
 def test_app_search_filters_cases(tmp_path, monkeypatch):
