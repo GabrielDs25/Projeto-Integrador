@@ -28,3 +28,15 @@ def test_app_search_filters_cases(tmp_path, monkeypatch):
 
     assert not app.exception
     assert app.metric[2].value == "1"
+
+
+def test_app_handles_unavailable_ollama(tmp_path, monkeypatch):
+    monkeypatch.setenv(
+        "EVALUATION_DB_PATH", str(tmp_path / "evaluations.sqlite3")
+    )
+    monkeypatch.setenv("OLLAMA_HOST", "http://127.0.0.1:1")
+
+    app = AppTest.from_file(str(APP_PATH)).run(timeout=20)
+
+    assert not app.exception
+    assert any("Não foi possível acessar o Ollama" in error.value for error in app.error)
