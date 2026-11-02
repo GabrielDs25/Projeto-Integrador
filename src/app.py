@@ -66,7 +66,7 @@ st.subheader("Executar avaliação com Ollama")
 try:
     ollama_client = create_client()
     available_models = list_models(ollama_client)
-except (ollama.RequestError, ollama.ResponseError) as error:
+except (ConnectionError, ollama.RequestError, ollama.ResponseError) as error:
     st.error(
         "Não foi possível acessar o Ollama. Inicie o Ollama e confirme a conexão "
         "em OLLAMA_HOST. Detalhes: " + str(error)
@@ -121,7 +121,11 @@ else:
                             answer,
                             seconds,
                         )
-                    except (ollama.RequestError, ollama.ResponseError) as error:
+                    except (
+                        ConnectionError,
+                        ollama.RequestError,
+                        ollama.ResponseError,
+                    ) as error:
                         failures += 1
                         save_result(
                             run_id,
