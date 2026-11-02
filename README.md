@@ -94,6 +94,8 @@ ollama pull llama3.2:3b
 
 Para a comparação prevista com três modelos, instale pelo menos mais dois modelos com o mesmo comando. Na plataforma, selecione os modelos instalados, escolha a quantidade de casos e inicie a avaliação. As respostas e os tempos são salvos em `data/evaluations.sqlite3` e podem ser consultados e exportados em CSV. Os erros de execução também são registrados; ainda não há aprovação automática das respostas.
 
+Na interface, configure os modelos e as perguntas na barra lateral. Comece com poucas perguntas para testar; depois aumente a quantidade. A aba **Resultados** mostra as avaliações salvas, e a aba **Casos de teste** permite consultar perguntas, referências e critérios.
+
 Para executar com Docker Compose, o serviço acessa o Ollama do computador em `host.docker.internal:11434` e mantém os resultados no diretório `data/`. Se o Ollama estiver em outro endereço, configure a variável `OLLAMA_HOST`.
 
 ## 5. Como Executar os Testes
@@ -139,29 +141,33 @@ A plataforma está sendo desenvolvida com recursos que facilitam a consulta, a o
 
 ### 8.1. Busca de perguntas
 
-Permite pesquisar palavras ou termos específicos para localizar perguntas dentro da base de casos de teste. Essa funcionalidade facilita a identificação de questões e agiliza a navegação pela plataforma.
+Na barra lateral, permite pesquisar palavras ou termos específicos nas perguntas.
 
 ### 8.2. Filtro por tema
 
-Possibilita selecionar assuntos específicos para visualizar somente as perguntas relacionadas ao tema escolhido, facilitando a organização e a realização de avaliações por categoria.
+Na barra lateral, permite escolher os temas das perguntas que serão exibidas ou avaliadas.
 
 ### 8.3. Indicadores gerais
 
 Apresenta informações quantitativas sobre a base de avaliação, permitindo acompanhar os principais dados cadastrados na plataforma.
 
-Atualmente, os indicadores demonstrados são:
+Os indicadores mostram:
 
 - **100 casos cadastrados:** quantidade total de perguntas disponíveis na base.
 - **10 temas:** número de categorias utilizadas para organizar os casos.
-- **100 casos encontrados:** quantidade de registros encontrados na consulta apresentada.
+- **Perguntas selecionadas:** quantidade que corresponde aos filtros atuais.
 
 ### 8.4. Distribuição de casos por tema
 
-Apresenta graficamente a quantidade de perguntas cadastradas em cada categoria. Esse recurso permite visualizar a distribuição dos casos e identificar quais temas possuem maior ou menor quantidade de perguntas.
+Na aba **Casos de teste**, apresenta a quantidade de perguntas em cada tema. A mesma aba permite consultar respostas de referência, critérios e baixar as perguntas filtradas.
+
+### 8.5. Execução e resultados
+
+A barra lateral permite selecionar modelos e a quantidade de perguntas. A tela informa quantas respostas serão geradas antes de iniciar. Na aba **Resultados**, é possível consultar tempos médios, respostas, falhas e baixar os resultados em CSV.
 
 ## 9. Demonstração da Interface da Plataforma
 
-A seguir, estão algumas imagens que demonstram as funcionalidades já desenvolvidas na versão inicial da plataforma.
+As imagens a seguir registram a interface de uma versão anterior; a navegação atual está organizada nas abas **Resultados** e **Casos de teste**, com os controles de avaliação na barra lateral.
 
 ### 9.1. Busca de perguntas
 
