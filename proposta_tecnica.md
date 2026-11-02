@@ -16,7 +16,7 @@ Desenvolver uma aplicação simples que execute um conjunto de perguntas em trê
 
 O usuário selecionará os modelos e iniciará uma avaliação. O sistema enviará as mesmas perguntas a cada modelo, armazenará os resultados e exibirá tabelas e gráficos. Cada caso de teste terá uma pergunta, uma resposta de referência ou critérios de correção e, quando possível, uma nota humana.
 
-## 4. Arquitetura inicial
+## 4. Arquitetura inicial - *Leonardo Esta nesta etapa*
 
 - **Interface:** Streamlit, para apresentar controles, tabelas e gráficos.
 - **Lógica:** Python, para executar testes, calcular métricas e organizar resultados.
