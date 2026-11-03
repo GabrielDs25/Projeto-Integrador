@@ -1,0 +1,10 @@
+services:
+  comparador-ia:
+    build: .
+    ports:
+      - "8501:8501"
+    environment:
+      OLLAMA_HOST: ${OLLAMA_HOST:-http://host.docker.internal:11434}
+      EVALUATION_DB_PATH: /app/data/evaluations.sqlite3
+    volumes:
+      - ./data:/app/data
