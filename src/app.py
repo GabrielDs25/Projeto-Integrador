@@ -4,8 +4,17 @@ import ollama
 import pandas as pd
 import streamlit as st
 
+from src.evaluation import concordance_rate, evaluate_response
 from src.model_runner import create_client, generate_answer, list_models
-from src.results_store import create_run, get_run_results, list_runs, save_result
+from src.results_store import (
+    create_run,
+    get_human_comparison,
+    get_human_evaluations,
+    get_run_results,
+    list_runs,
+    save_human_evaluation,
+    save_result,
+)
 
 st.set_page_config(page_title="Avaliação de modelos de IA", page_icon="🧪", layout="wide")
 st.title("🧪 Avaliação de modelos de IA")
@@ -140,7 +149,20 @@ if st.button(
                 answer, seconds = generate_answer(
                     ollama_client, model, str(case["pergunta"])
                 )
-                save_result(run_id, str(case["id"]), model, answer, seconds)
+                evaluation = evaluate_response(
+                    str(case["resposta_referencia"]),
+                    answer,
+                    str(case["criterio_aprovacao"]),
+                )
+                save_result(
+                    run_id,
+                    str(case["id"]),
+                    model,
+                    answer,
+                    seconds,
+                    correct=evaluation["correct"],
+                    score=evaluation["score"],
+                )
             except (ConnectionError, ollama.RequestError, ollama.ResponseError) as error:
                 failures += 1
                 save_result(run_id, str(case["id"]), model, None, None, str(error))
@@ -158,7 +180,11 @@ if st.button(
     else:
         st.success(f"Avaliação {run_id} concluída e salva.")
 
-results_tab, cases_tab = st.tabs(["📊 Resultados", "📚 Casos de teste"])
+results_tab, human_tab, cases_tab = st.tabs([
+    "📊 Resultados",
+    "🧑‍⚕️ Avaliação humana",
+    "📚 Casos de teste",
+])
 
 with results_tab:
     st.subheader("3. Consulte os resultados")
@@ -181,12 +207,15 @@ with results_tab:
         results_frame = pd.DataFrame(run_results)
 
         if not results_frame.empty:
-            successful_results = results_frame[results_frame["error"].isna()]
+            successful_results = results_frame[results_frame["error"].isna()].copy()
             if not successful_results.empty:
+                successful_results["correct"] = successful_results["correct"].fillna(False).astype(bool)
                 summary = (
                     successful_results.groupby("model")
                     .agg(
                         respostas=("response", "count"),
+                        acuracia=("correct", "mean"),
+                        score_medio=("score", "mean"),
                         tempo_medio_segundos=("seconds", "mean"),
                     )
                     .reset_index()
@@ -194,16 +223,74 @@ with results_tab:
                         columns={
                             "model": "Modelo",
                             "respostas": "Respostas",
+                            "acuracia": "Acurácia",
+                            "score_medio": "Nota média",
                             "tempo_medio_segundos": "Tempo médio (s)",
                         }
                     )
                 )
+                summary["Acurácia"] = (summary["Acurácia"] * 100).round(1)
+                summary["Nota média"] = summary["Nota média"].round(2)
                 summary["Tempo médio (s)"] = summary["Tempo médio (s)"].round(2)
                 st.dataframe(
                     summary,
                     hide_index=True,
                     use_container_width=True,
                 )
+
+                geral = successful_results["correct"].mean() if not successful_results.empty else 0.0
+                st.metric("Acurácia geral", f"{geral * 100:.1f}%")
+
+            comparison = pd.DataFrame(get_human_comparison(run_options[selected_run_label]))
+            if not comparison.empty:
+                comparison["auto_score"] = pd.to_numeric(comparison["auto_score"], errors="coerce")
+                comparison["human_score"] = pd.to_numeric(comparison["human_score"], errors="coerce")
+                comparison = comparison.dropna(subset=["auto_score", "human_score"])
+                if not comparison.empty:
+                    comparison_rows = []
+                    for model_name, model_rows in comparison.groupby("model"):
+                        model_pairs = [
+                            {"score": float(auto), "human_score": float(human)}
+                            for auto, human in zip(model_rows["auto_score"], model_rows["human_score"])
+                        ]
+                        comparison_rows.append(
+                            {
+                                "model": model_name,
+                                "nota_automatica": model_rows["auto_score"].mean(),
+                                "nota_humana": model_rows["human_score"].mean(),
+                                "concordancia": concordance_rate(
+                                    model_pairs,
+                                    auto_key="score",
+                                    human_key="human_score",
+                                ),
+                            }
+                        )
+                    comparison_summary = pd.DataFrame(comparison_rows)
+                    comparison_summary["nota_automatica"] = comparison_summary["nota_automatica"].round(2)
+                    comparison_summary["nota_humana"] = comparison_summary["nota_humana"].round(2)
+                    comparison_summary["concordancia"] = (comparison_summary["concordancia"] * 100).round(1)
+                    st.subheader("Concordância automática vs. humana")
+                    comparison_display = comparison_summary.rename(
+                        columns={
+                            "model": "Modelo",
+                            "nota_automatica": "Nota automática",
+                            "nota_humana": "Nota humana",
+                            "concordancia": "Concordância (%)",
+                        }
+                    )
+                    st.dataframe(
+                        comparison_display,
+                        hide_index=True,
+                        use_container_width=True,
+                    )
+                    concordancia_geral = comparison_display["Concordância (%)"].mean()
+                    st.metric("Concordância geral", f"{concordancia_geral:.1f}%")
+                    st.download_button(
+                        "Baixar comparação em CSV",
+                        data=comparison_display.to_csv(index=False).encode("utf-8-sig"),
+                        file_name=f"comparacao_humana_{run_options[selected_run_label]}.csv",
+                        mime="text/csv",
+                    )
 
             display_results = results_frame.rename(
                 columns={
@@ -212,7 +299,12 @@ with results_tab:
                     "response": "Resposta",
                     "seconds": "Tempo (s)",
                     "error": "Falha",
+                    "correct": "Aprovado",
+                    "score": "Nota",
                 }
+            )
+            display_results["Aprovado"] = display_results["Aprovado"].map(
+                {1: True, 0: False}
             )
             if display_results["Falha"].isna().all():
                 display_results = display_results.drop(columns=["Falha"])
@@ -226,6 +318,67 @@ with results_tab:
                 file_name=f"resultados_avaliacao_{run_options[selected_run_label]}.csv",
                 mime="text/csv",
             )
+
+with human_tab:
+    st.subheader("4. Registrar avaliação humana")
+    runs = list_runs()
+    if not runs:
+        st.info("Ainda não há avaliações para receber notas humanas.")
+    else:
+        run_options = {
+            f"Avaliação {run['id']} · {run['created_at'][:16].replace('T', ' ')}": run["id"]
+            for run in runs
+        }
+        selected_run_label = st.selectbox(
+            "Selecione a avaliação",
+            options=list(run_options),
+            key="human_run_select",
+        )
+        selected_run_id = run_options[selected_run_label]
+        selected_run_results = pd.DataFrame(get_run_results(selected_run_id))
+        if selected_run_results.empty:
+            st.info("Esta avaliação ainda não possui respostas registradas.")
+        else:
+            human_candidates = selected_run_results[selected_run_results["error"].isna()]
+            if human_candidates.empty:
+                st.info("Não há respostas válidas para receber avaliação humana.")
+            else:
+                case_id = st.selectbox(
+                    "Caso",
+                    options=human_candidates["case_id"].tolist(),
+                    key="human_case_select",
+                )
+                model = st.selectbox(
+                    "Modelo",
+                    options=sorted(human_candidates[human_candidates["case_id"] == case_id]["model"].tolist()),
+                    key="human_model_select",
+                )
+                row = human_candidates[
+                    (human_candidates["case_id"] == case_id)
+                    & (human_candidates["model"] == model)
+                ].iloc[0]
+                st.write("**Resposta do modelo**")
+                st.write(row.get("response", ""))
+
+                with st.form("human_evaluation_form"):
+                    score = st.slider("Nota humana (0 a 5)", 0, 5, 3)
+                    notes = st.text_area("Observações da avaliação")
+                    submitted = st.form_submit_button("Salvar avaliação humana")
+                    if submitted:
+                        save_human_evaluation(selected_run_id, str(case_id), model, int(score), notes)
+                        st.success("Avaliação humana salva com sucesso.")
+
+                existing_human = pd.DataFrame(get_human_evaluations(selected_run_id))
+                if not existing_human.empty:
+                    human_table = existing_human.rename(
+                        columns={
+                            "case_id": "Caso",
+                            "model": "Modelo",
+                            "score": "Nota humana",
+                            "notes": "Observações",
+                        }
+                    )
+                    st.dataframe(human_table, hide_index=True, use_container_width=True)
 
 with cases_tab:
     st.subheader("Conheça os casos de teste")

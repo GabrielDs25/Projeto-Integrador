@@ -20,7 +20,7 @@ O projeto consiste no desenvolvimento de uma plataforma destinada à avaliação
 
 A ferramenta tem como principal finalidade permitir a execução de testes padronizados, o registro das respostas geradas e a análise comparativa do desempenho de diferentes modelos, considerando critérios como qualidade das respostas, precisão, consistência e tempo de execução.
 
-**Estado atual do projeto:** A plataforma já permite executar modelos locais instalados no Ollama com os mesmos casos de teste, registrar respostas, tempos e falhas em SQLite e consultar ou exportar os resultados. A avaliação automática da qualidade e a comparação com notas humanas permanecem como próximas etapas.
+**Estado atual do projeto:** A plataforma já permite executar modelos locais instalados no Ollama com os mesmos casos de teste, registrar respostas, tempos e falhas em SQLite, consultar ou exportar os resultados e aplicar uma primeira avaliação automática por sobreposição de palavras-chave e critérios esperados. A comparação com notas humanas continua como etapa complementar.
 
 ## 2. Objetivos do Projeto
 
